@@ -14,5 +14,6 @@ void change()
 		scanf("%d",&nj)
 	 
 	}
+	//元気ちんこちっさ
 		
 }
