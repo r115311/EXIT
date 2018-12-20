@@ -126,6 +126,9 @@ void mainmanu(){
 				strcpy(filename[0],"./Databases/L1-1");
 				gomi=fileread();
 				break;
+			case 9:
+				system("clear");
+				break;
 			case 0:
 				infop("Good Bye!!");
 				return;
@@ -227,7 +230,34 @@ int filecheck(){
 
 
 void solve(){
-	infop("はぬとりの問題を解く関数");
+	int i,rslt,len;
+	char ans[1][30];
+	char a[1][15];
+	printf("解きたい問題のファイル名を入力してください\n");
+	scanf("%s",a[0]);
+	len=strlen(a[0]);
+	if(len>15){
+		errorp("ファイル名が長過ぎます");
+		return;
+	}
+	strcpy(filename[0],"./Databases/");
+	strcat(filename[0],a[0]);
+	fileread();
+	system("clear");
+	for(i=0;i<total;i++){
+		printf("%s\n→ ",jap[i]);
+		scanf("%s",ans[0]);
+		rslt=strcmp(eng[i],ans[0]);
+		if(rslt==0){
+			printf("正解！\n\n");
+			memorize[i]=1;
+			last[i]=1;
+		}else{
+			printf("不正解！(%s)\n\n",eng[i]);
+			mistake[i]++;
+		}
+	}
+	filewrite();		
 }
 
 void weak(){
