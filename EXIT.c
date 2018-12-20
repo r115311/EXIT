@@ -230,19 +230,22 @@ int filecheck(){
 
 
 void solve(){
-	int i,rslt,len;
+	int i,j,rslt,len;
 	char ans[1][30];
 	char a[1][15];
-	printf("解きたい問題のファイル名を入力してください\n");
-	scanf("%s",a[0]);
-	len=strlen(a[0]);
-	if(len>15){
-		errorp("ファイル名が長過ぎます");
-		return;
+	for(;;){
+		printf("解きたい問題のファイル名を入力してください\n");
+		scanf("%s",a[0]);
+		len=strlen(a[0]);
+		if(len>15){
+			errorp("ファイル名が長過ぎます");
+			return;
+		}
+		strcpy(filename[0],"./Databases/");
+		strcat(filename[0],a[0]);
+		j=fileread();
+		if(j==0) break;
 	}
-	strcpy(filename[0],"./Databases/");
-	strcat(filename[0],a[0]);
-	fileread();
 	system("clear");
 	for(i=0;i<total;i++){
 		printf("%s\n→ ",jap[i]);
