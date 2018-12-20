@@ -235,7 +235,34 @@ void weak(){
 }
 
 void change(){
-	infop("EXIT元気の問題変更関数");
+int w,n,nj;
+char j[1][30],e[1][30];
+	printf("単語の変更\n");
+	for(int i = 0; i < total; i++){
+		printf("%d  %s %s\n",i,jap[i],eng[i]);
+	}
+	printf("日本語を変更：１　英語を変更：２");
+	scanf("%d",&w);
+	if (w == 1){
+		n = 0;
+		printf("変更したい日本語の番号を入力してください");
+		scanf("%d",&n);
+		printf("変更後の日本語を入力してください");
+		scanf("%s",j[0]);
+		strcpy(jap[n],j[0]);
+		printf("正常に変更できました");
+	} else if (w == 2){
+		n = 0;
+		printf("変更したい英語の番号を入力してください");
+		scanf("%d",&n);
+		printf("変更後の日本語を入力してください");
+		scanf("%s",e[0]);
+		strcpy(eng[n],e[0]);
+		printf("正常に変更できました");
+		}else{
+			printf("正しく値を入力してください");
+		}
+	
 }
 
 void debug(){
