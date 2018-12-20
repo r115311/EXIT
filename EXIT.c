@@ -258,13 +258,48 @@ void solve(){
 		}else{
 			printf("不正解！(%s)\n\n",eng[i]);
 			mistake[i]++;
+			last[i]=0;
 		}
 	}
 	filewrite();		
 }
 
 void weak(){
-	infop("はぬとりの苦手関数");
+	int i,j,rslt,len;
+	char ans[1][30];
+	char a[1][15];
+	for(;;){
+		printf("解きたい問題のファイル名を入力してください\n");
+		scanf("%s",a[0]);
+		len=strlen(a[0]);
+		if(len>15){
+			errorp("ファイル名が長過ぎます");
+			return;
+		}
+		strcpy(filename[0],"./Databases/");
+		strcat(filename[0],a[0]);
+		j=fileread();
+		if(j==0) break;
+	}
+	system("clear");
+	for(i=0;i<total;i++){
+		if(memorize[i]==0){
+			printf("%s\n→ ",jap[i]);
+			scanf("%s",ans[0]);
+			rslt=strcmp(eng[i],ans[0]);
+			if(rslt==0){
+				printf("正解！\n\n");
+				memorize[i]=1;
+				last[i]=1;
+			}else{
+				printf("不正解！(%s)\n\n",eng[i]);
+				mistake[i]++;
+				last[i]=0;
+			}
+		}
+	}
+	filewrite();
+	
 }
 
 void change(){
@@ -276,6 +311,7 @@ void debug(){
 	infop("-----Debug Mode!!-----");
 	printf("単語数は%d\n",total);
 	printf("unuse=%d\n",unuse);
+	printf("memorize[i],mistake[i],jap[i],eng[i],last[i]\n");
 	for(i=0;i<total;i++){
 		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],jap[i],eng[i],last[i]);
 	}
