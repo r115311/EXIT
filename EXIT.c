@@ -233,58 +233,84 @@ void solve(){
 void weak(){
 	infop("はぬとりの苦手関数");
 }
+void skimn(){
+	int i;
+	for(i=0;i < total;i++){
+		printf("%d %s %s\n",i,jap[i],eng[i]);
+	}
+}
 
 void change(){
-int w,n,nj,i,lenj,lene,jnf;
+int w,n,nj,i,lenj,lene,jnf,jcf,enf,ecf,end;
 char j[1][30],e[1][30];
 	printf("単語の変更\n");
 	for(i = 0; i < total; i++){
 		printf("%d  %s %s\n",i,jap[i],eng[i]);
 	}
-	printf("日本語を変更：1　英語を変更：2\n");
-	scanf("%d",&w);
-	if (w == 1){
-		n = 0;
-		jnf=0;
-		while(jnf==0){
-			printf("変更したい日本語の番号を入力してください\n");
-			scanf("%d",&n);
-			if (total < n ){
-				printf("登録された単語数を超えています\n");
-				printf("もう一度入力してください\n");
-			}else{
-				jnf=1;
+	while(end == 0){
+		printf("日本語を変更：1　英語を変更：2 変更を終了：3\n");
+		scanf("%d",&w);
+		if (w == 1){
+			n = 0;
+			jnf=0;
+			while(jnf==0){
+				printf("変更したい日本語の番号を入力してください\n");
+				scanf("%d",&n);
+				if (total < n ){
+					printf("登録された単語数を超えています\n");
+					printf("もう一度入力してください\n");
+				}else{
+					jnf=1;
+				}
 			}
-		}
-		printf("変更後の日本語を入力してください\n");
-		scanf("%s",j[0]);
-		lenj = strlen(j[0]);
-		if (lenj > 30){
-			printf("登録された日本語の文字数が多すぎます\n");
-			printf("もう一度入力してください\n");
-		}
-		strcpy(jap[n],j[0]);
-		printf("正常に変更できました");
-	} else if (w == 2){
-		n = 0;
-		printf("変更したい英語の番号を入力してください\n");
-		scanf("%d",&n);
-		if (total < n ){
-			printf("登録されている単語数を超えています\n");
-			printf("もう一度入力してください\n");
-		}
-		printf("変更後の日本語を入力してください\n");
-		scanf("%s",e[0]);
-		lene = strlen(e[0]);
-		if (lene > 30){
-			printf("登録された日本語の文字数が多すぎます\n");
-			printf("もう一度入力してください\n");
-		}
-		strcpy(eng[n],e[0]);
-		printf("正常に変更できました");
-		}else{
-			printf("正しく値を入力してください");
-		}
+			while(jcf==0){
+				printf("変更後の日本語を入力してください\n");
+				scanf("%s",j[0]);
+				lenj = strlen(j[0]);
+				if (lenj > 30){
+					printf("登録された日本語の文字数が多すぎます\n");
+				}else{
+					jcf=1;
+				}
+			}
+			strcpy(jap[n],j[0]);
+			skimn();
+			printf("正常に変更できました");
+			break;
+		} else if (w == 2){
+			 n = 0;
+			 while(enf==0){
+			  	printf("変更したい英語の番号を入力してください\n");
+				scanf("%d",&n);
+				if (total < n ){
+					printf("登録されている単語数を超えています\n");
+					printf("もう一度入力してください\n");
+				}else{
+					enf=1;	
+				}
+			}
+			 while(ecf==0){
+			 	printf("変更後の日本語を入力してください\n");
+				scanf("%s",e[0]);
+				lene = strlen(e[0]);
+				if (lene > 30){
+					printf("登録された日本語の文字数が多すぎます\n");
+					printf("もう一度入力してください\n");
+				}else{
+					ecf=1;
+				}
+			}
+			strcpy(eng[n],e[0]);
+			skimn();
+			printf("正常に変更できました");
+			}else if{
+				printf("単語の変更を終了します\n");
+				end=1;
+			}else{
+				printf("正しく値を入力してください\n");
+			}
+			
+	}
 	filewrite();
 }
 
