@@ -36,7 +36,7 @@ int last[100];//前回の答案結果。正解していれば1初期状態0
 int total;//保存されている単語数
 int unuse;//初期状態0。一度でもといたことのあるファイルの場合１
 char filename[1][30];//ファイル名
-int success;//正解数
+int success=0;//正解数
 
 //出力に関する関数宣言
 void errorp(char a[200]);//赤色
@@ -258,16 +258,53 @@ void solve(){
 			printf("正解！\n\n");
 			memorize[i]=1;
 			last[i]=1;
+			success++;
 		}else{
 			printf("不正解！(%s)\n\n",eng[i]);
 			mistake[i]++;
+			last[i]=0;
 		}
 	}
 	filewrite();		
 }
 
 void weak(){
-	infop("はぬとりの苦手関数");
+	int i,j,rslt,len;
+	char ans[1][30];
+	char a[1][15];
+	for(;;){
+		printf("解きたい問題のファイル名を入力してください\n");
+		scanf("%s",a[0]);
+		len=strlen(a[0]);
+		if(len>15){
+			errorp("ファイル名が長過ぎます");
+			return;
+		}
+		strcpy(filename[0],"./Databases/");
+		strcat(filename[0],a[0]);
+		j=fileread();
+		if(j==0) break;
+	}
+	system("clear");
+	for(i=0;i<total;i++){
+		if(memorize[i]==0){
+			printf("%s\n→ ",jap[i]);
+			scanf("%s",ans[0]);
+			rslt=strcmp(eng[i],ans[0]);
+			if(rslt==0){
+				printf("正解！\n\n");
+				memorize[i]=1;
+				last[i]=1;
+				success++;
+			}else{
+				printf("不正解！(%s)\n\n",eng[i]);
+				mistake[i]++;
+				last[i]=0;
+			}
+		}
+	}
+	filewrite();
+	
 }
 
 void change(){
@@ -279,6 +316,7 @@ void debug(){
 	infop("-----Debug Mode!!-----");
 	printf("単語数は%d\n",total);
 	printf("unuse=%d\n",unuse);
+	printf("memorize[i],mistake[i],jap[i],eng[i],last[i]\n");
 	for(i=0;i<total;i++){
 		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],jap[i],eng[i],last[i]);
 	}
@@ -309,7 +347,7 @@ void optionp(char a[200]){
 }
 
 void ending(){
-	int data[11];
+	int data[12];
 	int q,max,trash;
 	char *plotfile="./gnu.csv";
 	
@@ -326,9 +364,10 @@ void ending(){
 		}
 	}
 	data[10]=success;
+	data[11]=0;
 	
 	FILE* FE=fopen(plotfile,"w");
-	for(q=1;q<11;q++){
+	for(q=1;q<12;q++){
 		fprintf(FE,"%d %d\n",q,data[q]);
 		if(data[q]>max){
 			max=data[q];
@@ -336,9 +375,9 @@ void ending(){
 	}
 	fclose(FE);
 	FILE* gp=popen("gnuplot -persist","w");
-	fprintf(gp,"set xrange[0:15]\n");
+	fprintf(gp,"set xrange[0:12]\n");
 		fprintf(gp,"set yrange[0:%d]\n",max);
-		fprintf(gp,"set xlabel 'recently'\n");
+		fprintf(gp,"set xlabel 'oldest.........latest'\n");
 		fprintf(gp,"set ylabel 'memorized word'\n");
 		fprintf(gp,"plot \"gnu.csv\" using 1:2 with linespoints\n");
 pclose(gp);
