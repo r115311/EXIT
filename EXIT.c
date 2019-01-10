@@ -241,18 +241,23 @@ void skimn(){
 }
 
 void change(){
-int w,n,nj,i,lenj,lene,jnf,jcf,enf,ecf,end;
-char j[1][30],e[1][30];
+int n,nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana;
+char j[1][30],e[1][30],w[9];
 	printf("単語の変更\n");
 	for(i = 0; i < total; i++){
 		printf("%d  %s %s\n",i,jap[i],eng[i]);
 	}
+	end=0;
 	while(end == 0){
 		printf("日本語を変更：1　英語を変更：2 変更を終了：3\n");
-		scanf("%d",&w);
-		if (w == 1){
+		scanf("%s",w);
+		kana=atoi(w);
+		if (kana == 1){
 			n = 0;
 			jnf=0;
+			jcf=0;
+			enf=0;
+			ecf=0;
 			while(jnf==0){
 				printf("変更したい日本語の番号を入力してください\n");
 				scanf("%d",&n);
@@ -277,7 +282,7 @@ char j[1][30],e[1][30];
 			skimn();
 			printf("正常に変更できました");
 			break;
-		} else if (w == 2){
+		} else if (kana == 2){
 			 n = 0;
 			 while(enf==0){
 			  	printf("変更したい英語の番号を入力してください\n");
@@ -303,10 +308,10 @@ char j[1][30],e[1][30];
 			strcpy(eng[n],e[0]);
 			skimn();
 			printf("正常に変更できました");
-			}else if{
+			}else if (kana==3){
 				printf("単語の変更を終了します\n");
 				end=1;
-			}else{
+			}else if (kana==0	){
 				printf("正しく値を入力してください\n");
 			}
 			
