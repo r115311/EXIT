@@ -258,6 +258,7 @@ void solve(){
 			printf("正解！\n\n");
 			memorize[i]=1;
 			last[i]=1;
+			success++;
 		}else{
 			printf("不正解！(%s)\n\n",eng[i]);
 			mistake[i]++;
@@ -294,6 +295,7 @@ void weak(){
 				printf("正解！\n\n");
 				memorize[i]=1;
 				last[i]=1;
+				success++;
 			}else{
 				printf("不正解！(%s)\n\n",eng[i]);
 				mistake[i]++;
