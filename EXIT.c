@@ -36,6 +36,7 @@ int last[100];//前回の答案結果。正解していれば1初期状態0
 int total;//保存されている単語数
 int unuse;//初期状態0。一度でもといたことのあるファイルの場合１
 char filename[1][30];//ファイル名
+int success;//正解数
 
 //出力に関する関数宣言
 void errorp(char a[200]);//赤色
@@ -57,6 +58,7 @@ void debug();//変数内容確認（完成時削除予定
 void filewrite();//変数保存関数
 int filecheck();//ファイルの有無確認
 int fileread();//変数読み出し関数
+void ending();//プログラム終了時の動作
 
 
 
@@ -131,6 +133,7 @@ void mainmanu(){
 				break;
 			case 0:
 				infop("Good Bye!!");
+				ending();
 				return;
 			default:
 				errorp("存在しないモードが選択されました。");
@@ -339,5 +342,41 @@ void questionp(char a[200]){
 
 void optionp(char a[200]){
 	printf(BOLDWHITE"%s\n"RESET,a);
+}
+
+void ending(){
+	int data[11];
+	int q,max,trash;
+	char *plotfile="./gnu.csv";
+	
+	max=0;
+	FILE* fg=fopen(plotfile,"r");
+	if(fg!=NULL){
+		for(q=0;q<10;q++){
+			fscanf(fg,"%d %d",&trash,&data[q]);
+		}
+		fclose(fg);
+	}else{
+		for(q=0;q<11;q++){
+			data[q]=0;
+		}
+	}
+	data[10]=success;
+	
+	FILE* FE=fopen(plotfile,"w");
+	for(q=1;q<11;q++){
+		fprintf(FE,"%d %d\n",q,data[q]);
+		if(data[q]>max){
+			max=data[q];
+		}
+	}
+	fclose(FE);
+	FILE* gp=popen("gnuplot -persist","w");
+	fprintf(gp,"set xrange[0:15]\n");
+		fprintf(gp,"set yrange[0:%d]\n",max);
+		fprintf(gp,"set xlabel 'recently'\n");
+		fprintf(gp,"set ylabel 'memorized word'\n");
+		fprintf(gp,"plot \"gnu.csv\" using 1:2 with linespoints\n");
+pclose(gp);
 }
 
