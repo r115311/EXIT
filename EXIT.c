@@ -36,7 +36,7 @@ int last[100];//前回の答案結果。正解していれば1初期状態0
 int total;//保存されている単語数
 int unuse;//初期状態0。一度でもといたことのあるファイルの場合１
 char filename[1][30];//ファイル名
-int success;//正解数
+int success=0;//正解数
 
 //出力に関する関数宣言
 void errorp(char a[200]);//赤色
@@ -172,7 +172,30 @@ int fileread(){
 }
 
 void skim(){
-	infop("AraTsuBAの一覧表示させる関数");
+	int i,j,len;
+	char a[1][15];
+	for(;;){
+		questionp("表示したい問題のファイル名を入力してください。");
+		scanf("%s",a[0]);
+		len=strlen(a[0]);
+		if(len>15){
+			errorp("ファイル名が長すぎます!");
+			return;
+		}
+		strcpy(filename[0],"./Databases/");
+		strcat(filename[0],a[0]);
+		j=fileread();
+		if(j==0) break;
+	}
+	infop("---------------------------------------------------\n");
+	infop("|番号|失敗回数|    英語    |  日本語訳  |前回の結果|\n");
+	for(i=0;i<total;i++){
+		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],eng[i],jap[i],last[i]);
+	}
+	infop("---------------------------------------------------\n");
+	printf("総単語数：%d\n",total);
+	printf("unuse=%d\n",unuse);
+	okp("一覧出力完了.\n");
 }
 
 void words(){
@@ -347,7 +370,7 @@ void optionp(char a[200]){
 }
 
 void ending(){
-	int data[11];
+	int data[12];
 	int q,max,trash;
 	char *plotfile="./gnu.csv";
 	
@@ -364,9 +387,10 @@ void ending(){
 		}
 	}
 	data[10]=success;
+	data[11]=0;
 	
 	FILE* FE=fopen(plotfile,"w");
-	for(q=1;q<11;q++){
+	for(q=1;q<12;q++){
 		fprintf(FE,"%d %d\n",q,data[q]);
 		if(data[q]>max){
 			max=data[q];
@@ -374,9 +398,9 @@ void ending(){
 	}
 	fclose(FE);
 	FILE* gp=popen("gnuplot -persist","w");
-	fprintf(gp,"set xrange[0:15]\n");
+	fprintf(gp,"set xrange[0:12]\n");
 		fprintf(gp,"set yrange[0:%d]\n",max);
-		fprintf(gp,"set xlabel 'recently'\n");
+		fprintf(gp,"set xlabel 'oldest.........latest'\n");
 		fprintf(gp,"set ylabel 'memorized word'\n");
 		fprintf(gp,"plot \"gnu.csv\" using 1:2 with linespoints\n");
 pclose(gp);
