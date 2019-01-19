@@ -382,6 +382,7 @@ void ending(){
 		}
 		fclose(fg);
 	}else{
+		if(success==0)return;
 		for(q=0;q<11;q++){
 			data[q]=0;
 		}
@@ -398,11 +399,12 @@ void ending(){
 	}
 	fclose(FE);
 	FILE* gp=popen("gnuplot -persist","w");
-	fprintf(gp,"set xrange[0:12]\n");
-		fprintf(gp,"set yrange[0:%d]\n",max);
-		fprintf(gp,"set xlabel 'oldest.........latest'\n");
+	fprintf(gp,"set style fill solid border lc rgb \"black\"\n");
+	fprintf(gp,"set xrange[0:11]\n");
+		fprintf(gp,"set yrange[0:%d]\n",max+1);
+		fprintf(gp,"set xlabel 'oldest........................latest'\n");
 		fprintf(gp,"set ylabel 'memorized word'\n");
-		fprintf(gp,"plot \"gnu.csv\" using 1:2 with linespoints\n");
+		fprintf(gp,"plot \"gnu.csv\" using 1:2 with boxes lw 2 lc rgb \"light-cyan\" notitle\n");
 pclose(gp);
 }
 
