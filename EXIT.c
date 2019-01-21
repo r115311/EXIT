@@ -170,7 +170,23 @@ void skim(){
 }
 
 void words(){
-	infop("EXIT元気の単語帳関数");
+	int kana,c,i;
+	char n[9];
+	printf("単語帳を開始します。\n");
+	printf("開始：１　終了：２\n");
+	scanf("%s",n);
+	kana=atoi(n);
+	if(kana==0){
+		printf("正しく数字で入力してください\n");		
+	}
+	else {
+		for(i=0; i < total; i++){
+			printf("%d %s\n",i,jap[i]);
+			if((c=getchar()=='\n')){
+				printf("%s\n",eng[i]);			
+			}	
+		}
+	}
 }
 
 void create(){
@@ -241,8 +257,8 @@ void skimn(){
 }
 
 void change(){
-int n,nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana;
-char j[1][30],e[1][30],w[9];
+int nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana,kanaj,kanae;
+char j[1][30],e[1][30],w[9],n[9];
 	printf("単語の変更\n");
 	for(i = 0; i < total; i++){
 		printf("%d  %s %s\n",i,jap[i],eng[i]);
@@ -253,15 +269,18 @@ char j[1][30],e[1][30],w[9];
 		scanf("%s",w);
 		kana=atoi(w);
 		if (kana == 1){
-			n = 0;
 			jnf=0;
 			jcf=0;
 			enf=0;
 			ecf=0;
 			while(jnf==0){
 				printf("変更したい日本語の番号を入力してください\n");
-				scanf("%d",&n);
-				if (total < n ){
+				scanf("%s",n);
+				kanaj=atoi(n);
+				if(kanaj==0){
+					printf("打ちなおしてください	\n");
+				}
+				else if (total < kanaj ){
 					printf("登録された単語数を超えています\n");
 					printf("もう一度入力してください\n");
 				}else{
@@ -278,16 +297,20 @@ char j[1][30],e[1][30],w[9];
 					jcf=1;
 				}
 			}
-			strcpy(jap[n],j[0]);
+			strcpy(jap[kanaj],j[0]);
 			skimn();
 			printf("正常に変更できました");
 			break;
 		} else if (kana == 2){
-			 n = 0;
+			enf=0;
 			 while(enf==0){
 			  	printf("変更したい英語の番号を入力してください\n");
-				scanf("%d",&n);
-				if (total < n ){
+				scanf("%s",n);
+				kanae=atoi(n);
+				if (kanae==0){
+					printf("打ちなおしてください\n");
+				}
+				else if (total < kanae ){
 					printf("登録されている単語数を超えています\n");
 					printf("もう一度入力してください\n");
 				}else{
@@ -295,7 +318,7 @@ char j[1][30],e[1][30],w[9];
 				}
 			}
 			 while(ecf==0){
-			 	printf("変更後の日本語を入力してください\n");
+			 	printf("変更後の英語を入力してください\n");
 				scanf("%s",e[0]);
 				lene = strlen(e[0]);
 				if (lene > 30){
@@ -305,9 +328,9 @@ char j[1][30],e[1][30],w[9];
 					ecf=1;
 				}
 			}
-			strcpy(eng[n],e[0]);
+			strcpy(eng[kanae],e[0]);
 			skimn();
-			printf("正常に変更できました");
+			printf("正常に変更できました\n");
 			}else if (kana==3){
 				printf("単語の変更を終了します\n");
 				end=1;
