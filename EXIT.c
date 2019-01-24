@@ -285,7 +285,8 @@ int filecheck(){
 
 
 void solve(){
-	int i,j,rslt,len;
+	int i,j,len;
+	long long int rslt;
 	char ans[1][30];
 	char a[1][15];
 	for(;;){
@@ -321,7 +322,8 @@ void solve(){
 }
 
 void weak(){
-	int i,j,rslt,len;
+	int i,j,len;
+	long long int rslt;
 	char ans[1][30];
 	char a[1][15];
 	for(;;){
