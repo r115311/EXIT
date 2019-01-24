@@ -170,21 +170,34 @@ void skim(){
 }
 
 void words(){
-	int kana,c,i;
+	int kana,c,i,f;
 	char n[9];
 	printf("単語帳を開始します。\n");
 	printf("開始：１　終了：２\n");
 	scanf("%s",n);
 	kana=atoi(n);
-	if(kana==0){
-		printf("正しく数字で入力してください\n");		
-	}
-	else {
-		for(i=0; i < total; i++){
-			printf("%d %s\n",i,jap[i]);
-			if((c=getchar()=='\n')){
-				printf("%s\n",eng[i]);			
-			}	
+	f=0;
+	while(f==0){
+		if(kana==0){
+			printf("正しく数字で入力してください\n");	
+			return;	
+		}
+		else if(kana==1){
+				for(i=0; i < total; i++){
+				while(getchar() != '\n'){
+				while(getchar() != '\n') ;
+				}
+					printf("%s\n",jap[i]);
+						while(getchar() != '\n'){
+						while(getchar() != '\n') ;
+					}
+						printf("%s\n",eng[i]);
+						printf("--------------\n");				
+				}
+				f=1;
+		}else if(kana==2){
+			okp("終了します\n");
+			return;
 		}
 	}
 }
@@ -252,7 +265,7 @@ void weak(){
 void skimn(){
 	int i;
 	for(i=0;i < total;i++){
-		printf("%d %s %s\n",i,jap[i],eng[i]);
+		printf("%d %s %s\n",i+1,jap[i],eng[i]);
 	}
 }
 
@@ -261,7 +274,7 @@ int nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana,kanaj,kanae;
 char j[1][30],e[1][30],w[9],n[9];
 	printf("単語の変更\n");
 	for(i = 0; i < total; i++){
-		printf("%d  %s %s\n",i,jap[i],eng[i]);
+		printf("%d  %s %s\n",i+1,jap[i],eng[i]);
 	}
 	end=0;
 	while(end == 0){
@@ -274,7 +287,7 @@ char j[1][30],e[1][30],w[9],n[9];
 			enf=0;
 			ecf=0;
 			while(jnf==0){
-				printf("変更したい日本語の番号を入力してください\n");
+				printf("変更したい日本語の番号を入力してください\n"); 
 				scanf("%s",n);
 				kanaj=atoi(n);
 				if(kanaj==0){
@@ -297,7 +310,7 @@ char j[1][30],e[1][30],w[9],n[9];
 					jcf=1;
 				}
 			}
-			strcpy(jap[kanaj],j[0]);
+			strcpy(jap[kanaj-1],j[0]);
 			skimn();
 			printf("正常に変更できました");
 			break;
@@ -328,13 +341,13 @@ char j[1][30],e[1][30],w[9],n[9];
 					ecf=1;
 				}
 			}
-			strcpy(eng[kanae],e[0]);
+			strcpy(eng[kanae-1],e[0]);
 			skimn();
 			printf("正常に変更できました\n");
 			}else if (kana==3){
 				printf("単語の変更を終了します\n");
 				end=1;
-			}else if (kana==0	){
+			}else if (kana==0){
 				printf("正しく値を入力してください\n");
 			}
 			
