@@ -188,7 +188,7 @@ void skim(){
 		if(j==0) break;
 	}
 	infop("---------------------------------------------------\n");
-	infop("|番号|失敗回数|    英語    |  日本語訳  |前回の結果|\n");
+	infop("|暗記できているか|失敗回数|    英語    |  日本語訳  |前回の結果|\n");
 	for(i=0;i<total;i++){
 		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],eng[i],jap[i],last[i]);
 	}
@@ -199,7 +199,41 @@ void skim(){
 }
 
 void words(){
-	infop("EXIT元気の単語帳関数");
+	int kana,c,i,f;
+	char n[9];
+	if(filename[0][0]=='\0'){
+		errorp("単語帳に値が入っていません\n");
+		return;
+	}
+
+	infop("単語帳を開始します。");
+	questionp("1.開始 2.取り消し");
+	scanf("%s",n);
+	kana=atoi(n);
+	f=0;
+	while(f==0){
+		if(kana==0){
+			errorp("正しく数字で入力してください\n");	
+			return;	
+		}
+		else if(kana==1){
+				for(i=0; i < total; i++){
+				while(getchar() != '\n'){
+				while(getchar() != '\n') ;
+				}
+					printf("%s\n",jap[i]);
+						while(getchar() != '\n'){
+						while(getchar() != '\n') ;
+					}
+						printf("%s\n",eng[i]);
+						printf("--------------\n");				
+				}
+				f=1;
+		}else if(kana==2){
+			okp("終了します\n");
+			return;
+		}
+	}
 }
 
 void create(){
@@ -218,7 +252,7 @@ void create(){
 			errorp("すでに存在するファイルのため作成できませんでした");
 			return;
 		}
-		questionp("作成する単語数(数値で入力)");
+		questionp("作成する単語数(数値以外不可)");
 		scanf("%d",&total);
 		if(total>100){
 			errorp("単語数が大きすぎます。（最大数100）");
@@ -292,7 +326,7 @@ void solve(){
 }
 
 void weak(){
-	int i,j,rslt,len;
+	int i,j,rslt,len,flag;
 	char ans[1][30];
 	char a[1][15];
 	for(;;){
@@ -309,8 +343,10 @@ void weak(){
 		if(j==0) break;
 	}
 	system("clear");
+	flag=1;
 	for(i=0;i<total;i++){
 		if(memorize[i]==0){
+			flag=0;
 			printf("%s\n→ ",jap[i]);
 			scanf("%s",ans[0]);
 			rslt=strcmp(eng[i],ans[0]);
@@ -327,11 +363,102 @@ void weak(){
 		}
 	}
 	filewrite();
+	if(flag==1){
+		infop("すべて暗記できています");
+	}
 	
+}
+void skimn(){
+	int i;
+	for(i=0;i < total;i++){
+		printf("%d %s %s\n",i+1,jap[i],eng[i]);
+	}
 }
 
 void change(){
-	infop("EXIT元気の問題変更関数");
+int nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana,kanaj,kanae;
+char j[1][30],e[1][30],w[9],n[9];
+	printf("単語の変更\n");
+	for(i = 0; i < total; i++){
+		printf("%d  %s %s\n",i+1,jap[i],eng[i]);
+	}
+	end=0;
+	while(end == 0){
+		questionp("1.日本語を変更　2.英語を変更 3.変更を終了");
+		scanf("%s",w);
+		kana=atoi(w);
+		if (kana == 1){
+			jnf=0;
+			jcf=0;
+			enf=0;
+			ecf=0;
+			while(jnf==0){
+				questionp("変更したい日本語の番号を入力してください\n"); 
+				scanf("%s",n);
+				kanaj=atoi(n);
+				if(kanaj==0){
+					errorp("打ちなおしてください	\n");
+				}
+				else if (total < kanaj ){
+					errorp("登録された単語数を超えています\n");
+					errorp("もう一度入力してください\n");
+				}else{
+					jnf=1;
+				}
+			}
+			while(jcf==0){
+				questionp("変更後の日本語を入力してください\n");
+				scanf("%s",j[0]);
+				lenj = strlen(j[0]);
+				if (lenj > 30){
+					errorp("登録された日本語の文字数が多すぎます\n");
+				}else{
+					jcf=1;
+				}
+			}
+			strcpy(jap[kanaj-1],j[0]);
+			skimn();
+			okp("正常に変更できました");
+			break;
+		} else if (kana == 2){
+			enf=0;
+			 while(enf==0){
+			  	questionp("変更したい英語の番号を入力してください\n");
+				scanf("%s",n);
+				kanae=atoi(n);
+				if (kanae==0){
+					errorp("打ちなおしてください\n");
+				}
+				else if (total < kanae ){
+					errorp("登録されている単語数を超えています\n");
+					errorp("もう一度入力してください\n");
+				}else{
+					enf=1;	
+				}
+			}
+			 while(ecf==0){
+			 	questionp("変更後の英語を入力してください\n");
+				scanf("%s",e[0]);
+				lene = strlen(e[0]);
+				if (lene > 30){
+					errorp("登録された日本語の文字数が多すぎます\n");
+					errorp("もう一度入力してください\n");
+				}else{
+					ecf=1;
+				}
+			}
+			strcpy(eng[kanae-1],e[0]);
+			skimn();
+			okp("正常に変更できました\n");
+			}else if (kana==3){
+				okp("単語の変更を終了します\n");
+				end=1;
+			}else if (kana==0){
+				errorp("正しく値を入力してください\n");
+			}
+			
+	}
+	filewrite();
 }
 
 void debug(){
@@ -382,6 +509,7 @@ void ending(){
 		}
 		fclose(fg);
 	}else{
+		if(success==0)return;
 		for(q=0;q<11;q++){
 			data[q]=0;
 		}
@@ -398,11 +526,12 @@ void ending(){
 	}
 	fclose(FE);
 	FILE* gp=popen("gnuplot -persist","w");
-	fprintf(gp,"set xrange[0:12]\n");
-		fprintf(gp,"set yrange[0:%d]\n",max);
-		fprintf(gp,"set xlabel 'oldest.........latest'\n");
+	fprintf(gp,"set style fill solid border lc rgb \"black\"\n");
+	fprintf(gp,"set xrange[0:11]\n");
+		fprintf(gp,"set yrange[0:%d]\n",max+1);
+		fprintf(gp,"set xlabel 'oldest........................latest'\n");
 		fprintf(gp,"set ylabel 'memorized word'\n");
-		fprintf(gp,"plot \"gnu.csv\" using 1:2 with linespoints\n");
+		fprintf(gp,"plot \"gnu.csv\" using 1:2 with boxes lw 2 lc rgb \"light-cyan\" notitle\n");
 pclose(gp);
 }
 
