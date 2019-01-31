@@ -36,7 +36,6 @@ int last[100];//前回の答案結果。正解していれば1初期状態0
 int total;//保存されている単語数
 int unuse;//初期状態0。一度でもといたことのあるファイルの場合１
 char filename[1][30];//ファイル名
-int success=0;//正解数
 
 //出力に関する関数宣言
 void errorp(char a[200]);//赤色
@@ -58,7 +57,6 @@ void debug();//変数内容確認（完成時削除予定
 void filewrite();//変数保存関数
 int filecheck();//ファイルの有無確認
 int fileread();//変数読み出し関数
-void ending();//プログラム終了時の動作
 
 
 
@@ -128,12 +126,8 @@ void mainmanu(){
 				strcpy(filename[0],"./Databases/L1-1");
 				gomi=fileread();
 				break;
-			case 9:
-				system("clear");
-				break;
 			case 0:
 				infop("Good Bye!!");
-				ending();
 				return;
 			default:
 				errorp("存在しないモードが選択されました。");
@@ -172,43 +166,25 @@ int fileread(){
 }
 
 void skim(){
-	int i,j,len;
-	char a[1][15];
-	for(;;){
-		questionp("表示したい問題のファイル名を入力してください。");
-		scanf("%s",a[0]);
-		len=strlen(a[0]);
-		if(len>15){
-			errorp("ファイル名が長すぎます!");
-			return;
-		}
-		strcpy(filename[0],"./Databases/");
-		strcat(filename[0],a[0]);
-		j=fileread();
-		if(j==0) break;
-	}
-	infop("---------------------------------------------------\n");
-	infop("|番号|失敗回数|    英語    |  日本語訳  |前回の結果|\n");
-	for(i=0;i<total;i++){
-		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],eng[i],jap[i],last[i]);
-	}
-	infop("---------------------------------------------------\n");
-	printf("総単語数：%d\n",total);
-	printf("unuse=%d\n",unuse);
-	okp("一覧出力完了.\n");
+	infop("AraTsuBAの一覧表示させる関数");
 }
 
 void words(){
 	int kana,c,i,f;
 	char n[9];
+	if(jap[0][0]=='\0'){
+		errorp("単語帳に値が入っていません\n");
+		return;
+	}
+
 	printf("単語帳を開始します。\n");
-	printf("開始：１　終了：２\n");
+	questionp("開始：１　終了：２\n");
 	scanf("%s",n);
 	kana=atoi(n);
 	f=0;
 	while(f==0){
 		if(kana==0){
-			printf("正しく数字で入力してください\n");	
+			errorp("正しく数字で入力してください\n");	
 			return;	
 		}
 		else if(kana==1){
@@ -285,80 +261,11 @@ int filecheck(){
 
 
 void solve(){
-	int i,j,len;
-	long long int rslt;
-	char ans[1][30];
-	char a[1][15];
-	for(;;){
-		printf("解きたい問題のファイル名を入力してください\n");
-		scanf("%s",a[0]);
-		len=strlen(a[0]);
-		if(len>15){
-			errorp("ファイル名が長過ぎます");
-			return;
-		}
-		strcpy(filename[0],"./Databases/");
-		strcat(filename[0],a[0]);
-		j=fileread();
-		if(j==0) break;
-	}
-	system("clear");
-	for(i=0;i<total;i++){
-		printf("%s\n→ ",jap[i]);
-		scanf("%s",ans[0]);
-		rslt=strcmp(eng[i],ans[0]);
-		if(rslt==0){
-			printf("正解！\n\n");
-			memorize[i]=1;
-			last[i]=1;
-			success++;
-		}else{
-			printf("不正解！(%s)\n\n",eng[i]);
-			mistake[i]++;
-			last[i]=0;
-		}
-	}
-	filewrite();		
+	infop("はぬとりの問題を解く関数");
 }
 
 void weak(){
-	int i,j,len;
-	long long int rslt;
-	char ans[1][30];
-	char a[1][15];
-	for(;;){
-		printf("解きたい問題のファイル名を入力してください\n");
-		scanf("%s",a[0]);
-		len=strlen(a[0]);
-		if(len>15){
-			errorp("ファイル名が長過ぎます");
-			return;
-		}
-		strcpy(filename[0],"./Databases/");
-		strcat(filename[0],a[0]);
-		j=fileread();
-		if(j==0) break;
-	}
-	system("clear");
-	for(i=0;i<total;i++){
-		if(memorize[i]==0){
-			printf("%s\n→ ",jap[i]);
-			scanf("%s",ans[0]);
-			rslt=strcmp(eng[i],ans[0]);
-			if(rslt==0){
-				printf("正解！\n\n");
-				memorize[i]=1;
-				last[i]=1;
-				success++;
-			}else{
-				printf("不正解！(%s)\n\n",eng[i]);
-				mistake[i]++;
-				last[i]=0;
-			}
-		}
-	}
-	filewrite();
-	
+	infop("はぬとりの苦手関数");
 }
 void skimn(){
 	int i;
@@ -376,7 +283,7 @@ char j[1][30],e[1][30],w[9],n[9];
 	}
 	end=0;
 	while(end == 0){
-		printf("日本語を変更：1　英語を変更：2 変更を終了：3\n");
+		questionp("日本語を変更：1　英語を変更：2 変更を終了：3\n");
 		scanf("%s",w);
 		kana=atoi(w);
 		if (kana == 1){
@@ -385,68 +292,68 @@ char j[1][30],e[1][30],w[9],n[9];
 			enf=0;
 			ecf=0;
 			while(jnf==0){
-				printf("変更したい日本語の番号を入力してください\n"); 
+				questionp("変更したい日本語の番号を入力してください\n"); 
 				scanf("%s",n);
 				kanaj=atoi(n);
 				if(kanaj==0){
-					printf("打ちなおしてください	\n");
+					errorp("打ちなおしてください	\n");
 				}
 				else if (total < kanaj ){
-					printf("登録された単語数を超えています\n");
-					printf("もう一度入力してください\n");
+					errorp("登録された単語数を超えています\n");
+					errorp("もう一度入力してください\n");
 				}else{
 					jnf=1;
 				}
 			}
 			while(jcf==0){
-				printf("変更後の日本語を入力してください\n");
+				questionp("変更後の日本語を入力してください\n");
 				scanf("%s",j[0]);
 				lenj = strlen(j[0]);
 				if (lenj > 30){
-					printf("登録された日本語の文字数が多すぎます\n");
+					errorp("登録された日本語の文字数が多すぎます\n");
 				}else{
 					jcf=1;
 				}
 			}
 			strcpy(jap[kanaj-1],j[0]);
 			skimn();
-			printf("正常に変更できました");
+			okp("正常に変更できました");
 			break;
 		} else if (kana == 2){
 			enf=0;
 			 while(enf==0){
-			  	printf("変更したい英語の番号を入力してください\n");
+			  	questionp("変更したい英語の番号を入力してください\n");
 				scanf("%s",n);
 				kanae=atoi(n);
 				if (kanae==0){
-					printf("打ちなおしてください\n");
+					errorp("打ちなおしてください\n");
 				}
 				else if (total < kanae ){
-					printf("登録されている単語数を超えています\n");
-					printf("もう一度入力してください\n");
+					errorp("登録されている単語数を超えています\n");
+					errorp("もう一度入力してください\n");
 				}else{
 					enf=1;	
 				}
 			}
 			 while(ecf==0){
-			 	printf("変更後の英語を入力してください\n");
+			 	questionp("変更後の英語を入力してください\n");
 				scanf("%s",e[0]);
 				lene = strlen(e[0]);
 				if (lene > 30){
-					printf("登録された日本語の文字数が多すぎます\n");
-					printf("もう一度入力してください\n");
+					errorp("登録された日本語の文字数が多すぎます\n");
+					errorp("もう一度入力してください\n");
 				}else{
 					ecf=1;
 				}
 			}
 			strcpy(eng[kanae-1],e[0]);
 			skimn();
-			printf("正常に変更できました\n");
+			okp("正常に変更できました\n");
 			}else if (kana==3){
-				printf("単語の変更を終了します\n");
+				okp("単語の変更を終了します\n");
 				end=1;
 			}else if (kana==0){
-				printf("正しく値を入力してください\n");
+				errorp("正しく値を入力してください\n");
 			}
 			
 	}
@@ -458,7 +365,6 @@ void debug(){
 	infop("-----Debug Mode!!-----");
 	printf("単語数は%d\n",total);
 	printf("unuse=%d\n",unuse);
-	printf("memorize[i],mistake[i],jap[i],eng[i],last[i]\n");
 	for(i=0;i<total;i++){
 		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],jap[i],eng[i],last[i]);
 	}
@@ -486,44 +392,5 @@ void questionp(char a[200]){
 
 void optionp(char a[200]){
 	printf(BOLDWHITE"%s\n"RESET,a);
-}
-
-void ending(){
-	int data[12];
-	int q,max,trash;
-	char *plotfile="./gnu.csv";
-	
-	max=0;
-	FILE* fg=fopen(plotfile,"r");
-	if(fg!=NULL){
-		for(q=0;q<10;q++){
-			fscanf(fg,"%d %d",&trash,&data[q]);
-		}
-		fclose(fg);
-	}else{
-		if(success==0)return;
-		for(q=0;q<11;q++){
-			data[q]=0;
-		}
-	}
-	data[10]=success;
-	data[11]=0;
-	
-	FILE* FE=fopen(plotfile,"w");
-	for(q=1;q<12;q++){
-		fprintf(FE,"%d %d\n",q,data[q]);
-		if(data[q]>max){
-			max=data[q];
-		}
-	}
-	fclose(FE);
-	FILE* gp=popen("gnuplot -persist","w");
-	fprintf(gp,"set style fill solid border lc rgb \"black\"\n");
-	fprintf(gp,"set xrange[0:11]\n");
-		fprintf(gp,"set yrange[0:%d]\n",max+1);
-		fprintf(gp,"set xlabel 'oldest........................latest'\n");
-		fprintf(gp,"set ylabel 'memorized word'\n");
-		fprintf(gp,"plot \"gnu.csv\" using 1:2 with boxes lw 2 lc rgb \"light-cyan\" notitle\n");
-pclose(gp);
 }
 
