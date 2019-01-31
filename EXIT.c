@@ -188,7 +188,7 @@ void skim(){
 		if(j==0) break;
 	}
 	infop("---------------------------------------------------\n");
-	infop("|番号|失敗回数|    英語    |  日本語訳  |前回の結果|\n");
+	infop("|暗記できているか|失敗回数|    英語    |  日本語訳  |前回の結果|\n");
 	for(i=0;i<total;i++){
 		printf("%d,%d,%s,%s,%d\n",memorize[i],mistake[i],eng[i],jap[i],last[i]);
 	}
@@ -201,13 +201,13 @@ void skim(){
 void words(){
 	int kana,c,i,f;
 	char n[9];
-	if(jap[0][0]=='\0'){
+	if(filename[0][0]=='\0'){
 		errorp("単語帳に値が入っていません\n");
 		return;
 	}
 
-	printf("単語帳を開始します。\n");
-	questionp("開始：１　終了：２\n");
+	infop("単語帳を開始します。");
+	questionp("1.開始 2.取り消し");
 	scanf("%s",n);
 	kana=atoi(n);
 	f=0;
@@ -252,7 +252,7 @@ void create(){
 			errorp("すでに存在するファイルのため作成できませんでした");
 			return;
 		}
-		questionp("作成する単語数(数値で入力)");
+		questionp("作成する単語数(数値以外不可)");
 		scanf("%d",&total);
 		if(total>100){
 			errorp("単語数が大きすぎます。（最大数100）");
@@ -326,7 +326,7 @@ void solve(){
 }
 
 void weak(){
-	int i,j,rslt,len;
+	int i,j,rslt,len,flag;
 	char ans[1][30];
 	char a[1][15];
 	for(;;){
@@ -343,8 +343,10 @@ void weak(){
 		if(j==0) break;
 	}
 	system("clear");
+	flag=1;
 	for(i=0;i<total;i++){
 		if(memorize[i]==0){
+			flag=0;
 			printf("%s\n→ ",jap[i]);
 			scanf("%s",ans[0]);
 			rslt=strcmp(eng[i],ans[0]);
@@ -361,6 +363,9 @@ void weak(){
 		}
 	}
 	filewrite();
+	if(flag==1){
+		infop("すべて暗記できています");
+	}
 	
 }
 void skimn(){
@@ -379,7 +384,7 @@ char j[1][30],e[1][30],w[9],n[9];
 	}
 	end=0;
 	while(end == 0){
-		questionp("日本語を変更：1　英語を変更：2 変更を終了：3\n");
+		questionp("1.日本語を変更　2.英語を変更 3.変更を終了");
 		scanf("%s",w);
 		kana=atoi(w);
 		if (kana == 1){
@@ -529,4 +534,5 @@ void ending(){
 		fprintf(gp,"plot \"gnu.csv\" using 1:2 with boxes lw 2 lc rgb \"light-cyan\" notitle\n");
 pclose(gp);
 }
+
 
