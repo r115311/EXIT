@@ -199,15 +199,23 @@ void skim(){
 }
 
 void words(){
-	int kana,c,i,f;
+	int kana,c,i,f,len,j;
 	char n[9];
-	if(jap[0][0]=='\0'){
-		errorp("単語帳に値が入っていません\n");
+	char a[1][15];
+	FILE *fr;
+	printf("単語帳を開始します。\n");
+	questionp("ファイル名を入力してください");
+	scanf("%s",a[0]);
+	len=strlen(a[0]);
+	if(len>15){
+		errorp("ファイル名が長過ぎます");
 		return;
 	}
-
-	printf("単語帳を開始します。\n");
-	questionp("開始：１　終了：２\n");
+	strcpy(filename[0],"./Databases/");
+	strcat(filename[0],a[0]);
+	j=fileread();
+	if(j==1) return ;
+	questionp("開始：１　終了：２");
 	scanf("%s",n);
 	kana=atoi(n);
 	f=0;
@@ -221,12 +229,11 @@ void words(){
 				while(getchar() != '\n'){
 				while(getchar() != '\n') ;
 				}
-					printf("%s\n",jap[i]);
+					printf("%s",jap[i]);
 						while(getchar() != '\n'){
 						while(getchar() != '\n') ;
 					}
-						printf("%s\n",eng[i]);
-						printf("--------------\n");				
+						printf("%s\n",eng[i]);		
 				}
 				f=1;
 		}else if(kana==2){
@@ -371,9 +378,20 @@ void skimn(){
 }
 
 void change(){
-int nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana,kanaj,kanae;
-char j[1][30],e[1][30],w[9],n[9];
+int nj,i,lenj,lene,jnf,jcf,enf,ecf,end,kana,kanaj,kanae,len,k;
+char j[1][30],e[1][30],w[9],n[9],a[1][15];
 	printf("単語の変更\n");
+	questionp("ファイル名を入力してください");
+	scanf("%s",a[0]);
+	len=strlen(a[0]);
+	if(len>15){
+		errorp("ファイル名が長過ぎます");
+		return;
+	}
+	strcpy(filename[0],"./Databases/");
+	strcat(filename[0],a[0]);
+	k=fileread();
+	if(k==1) return;
 	for(i = 0; i < total; i++){
 		printf("%d  %s %s\n",i+1,jap[i],eng[i]);
 	}
@@ -413,10 +431,10 @@ char j[1][30],e[1][30],w[9],n[9];
 			}
 			strcpy(jap[kanaj-1],j[0]);
 			skimn();
-			okp("正常に変更できました");
 			break;
 		} else if (kana == 2){
 			enf=0;
+			ecf=0;
 			 while(enf==0){
 			  	questionp("変更したい英語の番号を入力してください\n");
 				scanf("%s",n);
